@@ -1,0 +1,11 @@
+- hosts: all
+  become: true
+  tasks:
+   -  name: Installation d'un utilisateur esieeadmin
+      user:
+        name: esieeadmin
+
+
+
+
+#ansible-playbook -i inventory.yml system.yml -K
