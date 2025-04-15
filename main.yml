@@ -1,0 +1,3 @@
+apache_listen_port: 8080
+apache_vhosts:
+  - {servername: "serveur1", documentroot: "/var/www/vhosts/serveur1"}
