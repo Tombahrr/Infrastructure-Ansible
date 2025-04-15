@@ -1,0 +1,5 @@
+- hosts: webservers
+  vars_files:
+    - main.yml
+  roles:
+    - { role: geerlingguy.apache }
