@@ -1,0 +1,28 @@
+---
+- hosts: all
+  become: true
+  tasks:
+
+    - name: Installation d'un utilisateur esieeadmin
+      ansible.builtin.user:
+        name: esieeadmin
+        shell: /bin/bash
+        groups: sudo
+
+    - name: Deploiement clé SSH admin
+      ansible.posix.authorized_key:
+        user: esieeadmin
+        state: present
+        key: "{{ item }}"
+      with_file:
+        - public_keys/paul
+        - public_keys/tommy
+        - public_keys/yohan
+        - public_keys/sebastien
+
+    - name: Ajouter l'autorisation sudo sans mot de passe pour esieeadmin
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers
+        state: present
+        regexp: '^esieeadmin .*'
+        line: 'esieeadmin ALL=(ALL) NOPASSWD:ALL'
