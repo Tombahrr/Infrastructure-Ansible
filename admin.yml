@@ -1,5 +1,0 @@
-- name: Déployer l'accès SSH des administrateurs
-  hosts: all
-  become: yes
-  roles:
-    - admin_ssh_access
