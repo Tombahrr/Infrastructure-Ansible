@@ -1,0 +1,39 @@
+---
+- name: Préparation de la machine de backup
+  hosts: backup
+  become: true
+
+  tasks:
+
+    - name: Créer l'utilisateur esiee avec le mot de passe "esiee"
+      user:
+        name: esiee
+        password: "{{ 'esiee' | password_hash('sha512') }}"
+        shell: /bin/bash
+        create_home: true
+
+    - name: Créer le répertoire /var/backups
+      file:
+        path: /var/backups
+        state: directory
+        owner: esiee
+        group: esiee
+        mode: '0755'
+
+    - name: Autoriser la connexion SSH avec mot de passe
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PasswordAuthentication'
+        line: 'PasswordAuthentication yes'
+        state: present
+        backup: yes
+
+    - name: Redémarrer SSH pour appliquer la config
+      service:
+        name: ssh
+        state: restarted
+
+    - name: Autoriser le port SSH dans le pare-feu (UFW)
+      ufw:
+        rule: allow
+        name: OpenSSH
