@@ -48,7 +48,7 @@ backup_dir	Répertoire local pour stocker les backups
 
 Une fois le playbook exécuté, vous devez copier la clé publique SSH affichée par Ansible sur la machine replicat, dans le fichier ~/.ssh/authorized_keys de l’utilisateur root :
 
-# Sur la machine replicat (192.168.203.154)
+Sur la machine replicat (192.168.203.154)
 echo "clé_publique_affichée_par_le_playbook" >> ~/.ssh/authorized_keys
 
 
@@ -68,7 +68,7 @@ backup-hostname ansible_host=192.168.x.x ansible_user=your_user
 
 ⸻
 
-🛠 Exemple d’exécution
+Exemple d’exécution
 
 ansible-playbook setup_backup.yml -i inventory.ini
 
