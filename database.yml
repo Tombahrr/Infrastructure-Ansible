@@ -1,0 +1,6 @@
+- hosts: databases
+  become: true
+  vars_files:
+    - main_database.yml
+  roles:
+    - { role: geerlingguy.mysql }
