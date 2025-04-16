@@ -66,4 +66,4 @@
         name: "Sauvegarde distante MySQL depuis replicat"
         user: "{{ backup_user }}"
         job: "/usr/local/bin/fetch_replicat_backup.sh"
-        minute: "0"  # Lance la tâche à chaque début d’heure
+        minute: "*/2"  # Lance la tâche à chaque début d’heure
