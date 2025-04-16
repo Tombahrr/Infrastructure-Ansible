@@ -1,0 +1,26 @@
+mysql_root_password: mot2passetahlesfou
+
+mysql_databases:
+  - name: database_test
+    encoding: latin1
+    collation: latin1_general_ci
+
+  - name: database_test2
+    encoding: latin1
+    collation: latin1_general_ci
+
+mysql_users:
+  - name: user_test
+    host: "%"
+    password: Bonjour@2025!
+    priv: "database_test.*:ALL"
+
+  - name: user_test2
+    host: "%"
+    password: Bonjour@2025!
+    priv: "database_test2.*:ALL"
+
+mysql_replication_role: "master"
+mysql_replication_user: "repl_user"
+mysql_replication_password: "replipass123"
+
