@@ -1,4 +1,4 @@
-- hosts: db-master
+- hosts: databases
   become: true
   vars_files:
     - main_database.yml
