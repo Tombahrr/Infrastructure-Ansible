@@ -1,0 +1,57 @@
+- name: Installer WordPress pour plusieurs clients
+  hosts: webservers
+  become: true
+  gather_facts: false
+
+  vars:
+    client_users:
+      - name: john.local
+      - name: marie.local
+      - name: rachida.local
+
+  tasks:
+    # Extraire les noms des clients pour ce serveur
+    - name: Extraire les noms des clients
+      set_fact:
+        client_names: "{{ client_users | map(attribute='name') | list }}"
+
+    # Télécharger l'archive WordPress une seule fois
+    - name: Télécharger l'archive WordPress
+      ansible.builtin.get_url:
+        url: https://wordpress.org/latest.zip
+        dest: /tmp/wordpress.zip
+        mode: '0644'
+
+    # Installer unzip si nécessaire
+    - name: Installer unzip
+      ansible.builtin.apt:
+        name: unzip
+        state: present
+        update_cache: yes
+
+    # Décompresser WordPress pour chaque client dans /var/www/vhosts/
+    - name: Décompresser WordPress pour chaque client
+      ansible.builtin.command:
+        cmd: unzip /tmp/wordpress.zip -d /var/www/vhosts/{{ item }}
+      args:
+        creates: /var/www/vhosts/{{ item }}/wordpress
+      loop: "{{ client_names }}"
+
+    # Déplacer le contenu de WordPress à la racine pour chaque client
+    - name: Déplacer le contenu de WordPress à la racine pour chaque client
+      ansible.builtin.shell: |
+        mv /var/www/vhosts/{{ item }}/wordpress/* /var/www/vhosts/{{ item }}/
+        rm -rf /var/www/vhosts/{{ item }}/wordpress
+      args:
+        executable: /bin/bash
+      loop: "{{ client_names }}"
+
+    # Appliquer les bonnes permissions pour chaque client
+    - name: Appliquer les permissions pour chaque client
+      ansible.builtin.file:
+        path: /var/www/vhosts/{{ item }}
+        state: directory
+        recurse: yes
+        owner: www-data
+        group: www-data
+      loop: "{{ client_names }}"
