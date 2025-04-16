@@ -1,0 +1,33 @@
+- name: Créer le groupe admin
+  group:
+    name: admin
+    state: present
+
+- name: Créer l'utilisateur admin
+  user:
+    name: admin
+    group: admin
+    shell: /bin/bash
+    create_home: yes
+
+- name: Créer le dossier .ssh
+  file:
+    path: /home/admin/.ssh
+    state: directory
+    owner: admin
+    group: admin
+    mode: 0700
+
+- name: Ajouter les clés SSH autorisées
+  copy:
+    src: authorized_keys_admins
+    dest: /home/admin/.ssh/authorized_keys
+    owner: admin
+    group: admin
+    mode: 0600
+
+- name: Ajouter le sudo sans mot de passe
+  copy:
+    content: "admin ALL=(ALL) NOPASSWD:ALL"
+    dest: /etc/sudoers.d/admin
+    mode: 0440
