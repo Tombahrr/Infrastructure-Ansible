@@ -38,12 +38,7 @@
         path: "/home/{{ backup_user }}/.ssh"
         owner: "{{ backup_user }}"
         group: "{{ backup_user }}"
-        recurse: true  # Applique les permissions à tout le contenu récursivement
-
-   ## - name: Afficher la clé publique à copier sur replicat
-    ##  debug:
-    ##    msg: "Copie cette clé sur replicat : {{ lookup('file', '/home/' + backup_user + '/.ssh/id_rsa.pub') }}"
-        # Affiche la clé publique générée, qui doit être copiée sur la machine replicat dans ~/.ssh/authorized_keys
+        recurse: true  # Applique les permissions à tout le contenu
 
     - name: Créer le dossier de backup
       file:
