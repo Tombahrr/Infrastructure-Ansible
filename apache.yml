@@ -1,4 +1,5 @@
-- hosts: server1
+- hosts: webservers
+  become: true
   vars_files:
     - vars/main.yml
   roles:
