@@ -1,0 +1,12 @@
+# roles/apache/tasks/apache.yml
+- name: Installer Apache
+  apt:
+    name: apache2
+    state: present
+    update_cache: yes
+
+- name: Activer et démarrer Apache
+  service:
+    name: apache2
+    state: started
+    enabled: yes

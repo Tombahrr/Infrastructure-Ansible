@@ -1,3 +1,7 @@
 apache_listen_port: 8080
 apache_vhosts:
-  - {servername: "example.com", documentroot: "/var/www/vhosts/example_com"}
+  - {servername: "john.local", documentroot: "/var/www/vhosts/john.local"}
+
+  - {servername: "marie.local", documentroot: "/var/www/vhosts/marie.local"}
+
+  - {servername: "rachida.local", documentroot: "/var/www/vhosts/rachida.local"}

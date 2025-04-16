@@ -1,0 +1,22 @@
+all:
+  children:
+    webservers:
+      hosts:
+        web1:
+          ansible_host: 192.168.203.222
+          ansible_user: tommy
+    databases:
+      hosts:
+        db-master:
+          ansible_host: 192.168.203.31
+          ansible_user: ubuntu
+        db-replicat:
+          ansible_host: 192.168.203.154
+          ansible_user: ubuntu
+    backup:
+      hosts:
+        db-backup:
+          ansible_host: 192.168.203.94
+          ansible_user: esiee
+
+

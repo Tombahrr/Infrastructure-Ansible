@@ -1,0 +1,60 @@
+- name: Créer les dossiers clients
+  file:
+    path: "/var/www/clients/{{ item.name }}"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: '0755'
+  loop: "{{ clients }}"
+
+- name: Installer unzip si manquant
+  apt:
+    name: unzip
+    state: present
+    update_cache: yes
+
+
+- name: Télécharger WordPress une seule fois
+  get_url:
+    url: https://wordpress.org/latest.zip
+    dest: /tmp/latest.zip
+  delegate_to: localhost
+
+- name: Extraire WordPress pour chaque client
+  unarchive:
+    src: /tmp/latest.zip
+    dest: "/var/www/clients/{{ item.name }}"
+    remote_src: yes
+  loop: "{{ clients }}"
+
+- name: Déplacer les fichiers WordPress
+  command: mv /var/www/clients/{{ item.name }}/wordpress/* /var/www/clients/{{ item.name }}/
+  loop: "{{ clients }}"
+  ignore_errors: true
+
+- name: Supprimer le dossier wordpress vide
+  file:
+    path: /var/www/clients/{{ item.name }}/wordpress
+    state: absent
+  loop: "{{ clients }}"
+  ignore_errors: true
+
+- name: Créer page d'accueil personnalisée
+  template:
+    src: index.html.j2
+    dest: "/var/www/clients/{{ item.name }}/index.html"
+    owner: www-data
+    group: www-data
+    mode: '0644'
+  loop: "{{ clients }}"
+
+- name: Générer les VirtualHosts Apache
+  template:
+    src: vhost.conf.j2
+    dest: "/etc/apache2/sites-available/{{ item.name }}.conf"
+  loop: "{{ clients }}"
+
+- name: Activer les sites
+  command: a2ensite {{ item.name }}.conf
+  loop: "{{ clients }}"
+  notify: Reload Apache
